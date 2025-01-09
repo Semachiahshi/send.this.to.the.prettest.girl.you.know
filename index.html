@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Send to the Prettiest Girl</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #f5a623, #f2a3d3);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+            text-align: center;
+            overflow: hidden;
+        }
+        .heart {
+            font-size: 50px;
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+        .content {
+            max-width: 600px;
+            margin: 20px;
+            padding: 40px;
+            background-color: rgba(0, 0, 0, 0.6);
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        h1 {
+            font-size: 36px;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        .heart-container {
+            margin: 20px 0;
+        }
+        .teddy-bear {
+            font-size: 120px;
+            margin: 20px 0;
+            animation: bounce 1s ease-in-out infinite;
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+        .button {
+            background-color: #ff4081;
+            color: white;
+            padding: 12px 30px;
+            font-size: 18px;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+        }
+        .button:hover {
+            background-color: #e91e63;
+            transform: scale(1.1);
+        }
+        .button:active {
+            transform: scale(0.9);
+        }
+    </style>
+</head>
+<body>
+    <div class="content">
+        <h1>Send this to the prettiest girl you know</h1>
+        <div class="heart-container">
+            <span class="heart">❤️</span>
+            <span class="heart">❤️</span>
+            <span class="heart">❤️</span>
+        </div>
+        <div class="teddy-bear">🧸</div>
+        <a href="#" class="button" id="sendButton">Send It!</a>
+    </div>
+
+    <script>
+        // Volání serverless funkce pro logování IP adresy
+        fetch('/api/logIp')
+            .then(response => response.text())
+            .then(data => console.log(data))
+            .catch(error => console.error('Error logging IP:', error));
+    </script>
+</body>
+</html>
