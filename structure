@@ -1,0 +1,7 @@
+/my-project
+  /api
+    logIp.js  (serverless funkce)
+  /public
+    index.html  (vaše HTML stránka)
+    style.css   (volitelný externí CSS soubor)
+  vercel.json    (volitelný konfigurační soubor pro Vercel)
