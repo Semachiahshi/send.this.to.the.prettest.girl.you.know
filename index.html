@@ -1,43 +1,44 @@
 <!DOCTYPE html>
 <html lang="cs">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Přihlášení a Ovládání Obrazovky</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Piškvorky</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Výběr role -->
-    <div id="role-selection" class="screen">
-        <h2>Vyberte roli</h2>
-        <button id="student-btn">Přihlásit jako student</button>
-        <button id="admin-btn">Přihlásit jako admin</button>
-    </div>
+  <div id="login">
+    <h1>Piškvorky - Přihlášení</h1>
+    <form id="loginForm">
+      <label for="user1">Uživatel 1:</label>
+      <input type="text" id="user1" placeholder="Jméno" required>
+      <input type="password" id="password1" placeholder="Heslo" required>
+      <label for="user2">Uživatel 2:</label>
+      <input type="text" id="user2" placeholder="Jméno" required>
+      <input type="password" id="password2" placeholder="Heslo" required>
+      <button type="submit">Přihlásit se</button>
+    </form>
+  </div>
 
-    <!-- Přihlášení admina -->
-    <div id="admin-screen" class="screen">
-        <h2>Vstup pro administrátora</h2>
-        <input type="password" id="admin-password" placeholder="Zadejte heslo administrátora">
-        <button id="admin-login">Připojit se</button>
+  <div id="game" class="hidden">
+    <h1>Piškvorky</h1>
+    <h2 id="turn">Na tahu: </h2>
+    <div id="board"></div>
+    <div id="history">
+      <h3>Historie her:</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Hráč 1</th>
+            <th>Hráč 2</th>
+            <th>Vítěz</th>
+          </tr>
+        </thead>
+        <tbody id="historyBody"></tbody>
+      </table>
     </div>
+  </div>
 
-    <!-- Diktát pro studenty -->
-    <div id="student-screen" class="screen">
-        <h2>Doplňte správná písmena:</h2>
-        <div id="dictation-container"></div>
-        <button id="submit-dictation">Zkontrolovat</button>
-    </div>
-
-    <!-- Správa admina -->
-    <div id="admin-management" class="screen">
-        <h2>Správa systému</h2>
-        <button id="freeze-dictation">Zmrazit diktát</button>
-        <button id="remove-student">Odstranit studenta</button>
-        <button id="explain-dictation">Vysvětlit</button>
-        <button id="watch-student">Sledovat studenta</button>
-        <div id="admin-view" style="margin-top: 20px; text-align: left;"></div>
-    </div>
-
-    <script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
