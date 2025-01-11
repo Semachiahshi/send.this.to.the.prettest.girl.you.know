@@ -4,76 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Piškvorky</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #f4f4f4;
-        }
-
-        h1 {
-            margin-bottom: 20px;
-        }
-
-        #game-board {
-            display: grid;
-            grid-template-columns: repeat(3, 100px);
-            grid-template-rows: repeat(3, 100px);
-            gap: 5px;
-        }
-
-        .cell {
-            width: 100px;
-            height: 100px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            font-weight: bold;
-            color: #333;
-            background-color: #fff;
-            border: 1px solid #ccc;
-            cursor: pointer;
-        }
-
-        .cell.taken {
-            cursor: not-allowed;
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <h1>Piškvorky</h1>
-    <div id="game-board"></div>
-    <script>
-        const board = document.getElementById('game-board');
 
-        // Vytvoření prázdné mřížky
-        for (let i = 0; i < 9; i++) {
-            const cell = document.createElement('div');
-            cell.classList.add('cell');
-            board.appendChild(cell);
-        }
+    <!-- Výběr hráčů -->
+    <div id="player-select">
+        <button id="player1-btn">User 1</button>
+        <button id="player2-btn">User 2</button>
+    </div>
 
-        let currentPlayer = 'X';
+    <!-- Herní plocha -->
+    <div id="game-board" class="hidden"></div>
 
-        // Přidání logiky klikání na políčka
-        board.addEventListener('click', (e) => {
-            const cell = e.target;
+    <p id="current-player" class="hidden">Na tahu: <span id="player-name"></span></p>
 
-            // Kontrola, jestli klikáme na prázdné políčko
-            if (cell.classList.contains('cell') && !cell.classList.contains('taken')) {
-                cell.textContent = currentPlayer; // Nastaví aktuální hráče
-                cell.classList.add('taken');     // Označí pole jako obsazené
-
-                // Přepnutí hráče
-                currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
-            }
-        });
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
