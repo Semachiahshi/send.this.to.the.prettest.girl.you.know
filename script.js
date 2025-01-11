@@ -1,5 +1,6 @@
-let studentAnswers = []; // Pole pro sledování odpovědí studenta
-let adminWatching = false; // Indikátor, zda admin sleduje studenta
+let studentAnswers = []; // Sledování odpovědí studenta
+let correctAnswers = []; // Správné odpovědi
+let adminWatching = false; // Indikátor sledování adminem
 
 document.getElementById('student-btn').addEventListener('click', function () {
     document.getElementById('role-selection').style.display = 'none';
@@ -18,6 +19,7 @@ document.getElementById('admin-login').addEventListener('click', function () {
         alert('Vítejte, administrátore!');
         document.getElementById('admin-screen').style.display = 'none';
         document.getElementById('admin-management').style.display = 'block';
+        updateAdminView(); // Zobrazí aktuální stav odpovědí
     } else {
         alert('Chybné heslo!');
     }
@@ -26,8 +28,9 @@ document.getElementById('admin-login').addEventListener('click', function () {
 document.getElementById('freeze-dictation').addEventListener('click', function () {
     alert('Diktát byl zmražen!');
     document.getElementById('submit-dictation').disabled = true;
-    const inputs = document.querySelectorAll('#dictation-container input');
-    inputs.forEach(input => input.disabled = true);
+    document.querySelectorAll('#dictation-container input').forEach(input => {
+        input.disabled = true;
+    });
 });
 
 document.getElementById('remove-student').addEventListener('click', function () {
@@ -39,7 +42,7 @@ document.getElementById('remove-student').addEventListener('click', function () 
 document.getElementById('explain-dictation').addEventListener('click', function () {
     const explanation = `
         1. Měl jsi s **ním** to štěstí. (Používá se "n" s tvrdým i, protože jde o mužský rod.)
-        2. Včelky letěly kolem květ___. (Správná odpověď je "in" pro ženský rod.)
+        2. Včelky letěly kolem květ**in**. (Ženský rod končí měkkým "i".)
         ... (a tak dále pro všech 10 vět)
     `;
     alert(`Vysvětlení:\n${explanation}`);
@@ -65,10 +68,10 @@ function loadDictation() {
         "V parku seděla stará pan__."
     ];
 
-    const correctAnswers = ["n", "in", "ami", "ým", "i", "e", "kou", "ého", "e", "í"];
+    correctAnswers = ["n", "in", "ami", "ým", "i", "e", "kou", "ého", "e", "í"];
+    studentAnswers = Array(sentences.length).fill(null); // Inicializace odpovědí
     const container = document.getElementById('dictation-container');
-    container.innerHTML = ''; // Vyčistíme předchozí cvičení
-    studentAnswers = Array(sentences.length).fill(null); // Inicializace sledování odpovědí
+    container.innerHTML = ''; // Vyčistíme obsah
 
     sentences.forEach((sentence, index) => {
         const div = document.createElement('div');
@@ -78,19 +81,20 @@ function loadDictation() {
 
     document.getElementById('submit-dictation').addEventListener('click', function () {
         let score = 0;
-        sentences.forEach((_, index) => {
-            const answer = document.getElementById(`input-${index}`).value.trim();
-            if (answer === correctAnswers[index]) {
+        correctAnswers.forEach((correct, index) => {
+            const answer = studentAnswers[index] || "";
+            const input = document.getElementById(`input-${index}`);
+            if (answer.trim() === correct) {
                 score++;
-                document.getElementById(`input-${index}`).style.backgroundColor = 'lightgreen';
+                input.style.backgroundColor = 'lightgreen';
             } else {
-                document.getElementById(`input-${index}`).style.backgroundColor = 'lightcoral';
+                input.style.backgroundColor = 'lightcoral';
             }
         });
 
-        alert(`Vaše skóre je: ${score}/${sentences.length}`);
+        alert(`Vaše skóre je: ${score}/${correctAnswers.length}`);
         if (adminWatching) {
-            alert('Admin vidí aktuální skóre studenta.');
+            updateAdminView();
         }
     });
 }
@@ -104,12 +108,12 @@ function updateStudentAnswer(index, value) {
 
 function updateAdminView() {
     const adminView = document.getElementById('admin-view');
-    if (!adminView) return;
-
     adminView.innerHTML = '';
     studentAnswers.forEach((answer, index) => {
         const div = document.createElement('div');
-        div.textContent = `Věta ${index + 1}: ${answer || "nevyplněno"}`;
+        div.textContent = `Věta ${index + 1}: ${answer || "nevyplněno"} ${
+            answer === correctAnswers[index] ? "(správně)" : "(špatně)"
+        }`;
         adminView.appendChild(div);
     });
 }
