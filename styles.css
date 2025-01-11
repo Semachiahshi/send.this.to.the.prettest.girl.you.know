@@ -1,66 +1,39 @@
 body {
-  font-family: Arial, sans-serif;
-  text-align: center;
-  margin: 0;
-  padding: 0;
-  background: #f4f4f4;
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #f4f4f4;
 }
 
-.hidden {
-  display: none;
+h1 {
+    margin-bottom: 20px;
 }
 
-#login, #game {
-  margin-top: 50px;
+#game-board {
+    display: grid;
+    grid-template-columns: repeat(3, 100px);
+    grid-template-rows: repeat(3, 100px);
+    gap: 5px;
 }
 
-#board {
-  display: grid;
-  grid-template-columns: repeat(3, 100px);
-  grid-gap: 5px;
-  margin: 20px auto;
+.cell {
+    width: 100px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    font-weight: bold;
+    color: #333;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    cursor: pointer;
 }
 
-#board div {
-  width: 100px;
-  height: 100px;
-  background: #fff;
-  border: 2px solid #000;
-  font-size: 2rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-}
-
-#board div.taken {
-  pointer-events: none;
-}
-
-#history table {
-  margin: 20px auto;
-  width: 80%;
-  border-collapse: collapse;
-}
-
-#history table, #history th, #history td {
-  border: 1px solid #000;
-}
-
-#history th, #history td {
-  padding: 8px;
-  text-align: center;
-}
-
-.win {
-  animation: winEffect 1s infinite alternate;
-}
-
-@keyframes winEffect {
-  from {
-    background-color: #ff0;
-  }
-  to {
-    background-color: #f00;
-  }
+.cell.taken {
+    cursor: not-allowed;
 }
