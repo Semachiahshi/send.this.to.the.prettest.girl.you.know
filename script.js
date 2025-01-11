@@ -1,3 +1,6 @@
+let studentAnswers = []; // Pole pro sledování odpovědí studenta
+let adminWatching = false; // Indikátor, zda admin sleduje studenta
+
 document.getElementById('student-btn').addEventListener('click', function () {
     document.getElementById('role-selection').style.display = 'none';
     document.getElementById('student-screen').style.display = 'block';
@@ -23,6 +26,8 @@ document.getElementById('admin-login').addEventListener('click', function () {
 document.getElementById('freeze-dictation').addEventListener('click', function () {
     alert('Diktát byl zmražen!');
     document.getElementById('submit-dictation').disabled = true;
+    const inputs = document.querySelectorAll('#dictation-container input');
+    inputs.forEach(input => input.disabled = true);
 });
 
 document.getElementById('remove-student').addEventListener('click', function () {
@@ -34,11 +39,16 @@ document.getElementById('remove-student').addEventListener('click', function () 
 document.getElementById('explain-dictation').addEventListener('click', function () {
     const explanation = `
         1. Měl jsi s **ním** to štěstí. (Používá se "n" s tvrdým i, protože jde o mužský rod.)
-        2. Včelky letěly kolem květ**in**. (Používá se "in", protože jde o ženský rod.)
-        3. Dítě si hrálo s hračk**ami**. (Používá se měkké "i", protože slovo má ženský rod.)
+        2. Včelky letěly kolem květ___. (Správná odpověď je "in" pro ženský rod.)
         ... (a tak dále pro všech 10 vět)
     `;
     alert(`Vysvětlení:\n${explanation}`);
+});
+
+document.getElementById('watch-student').addEventListener('click', function () {
+    adminWatching = true;
+    alert('Sledujete pokrok studenta.');
+    updateAdminView();
 });
 
 function loadDictation() {
@@ -58,10 +68,11 @@ function loadDictation() {
     const correctAnswers = ["n", "in", "ami", "ým", "i", "e", "kou", "ého", "e", "í"];
     const container = document.getElementById('dictation-container');
     container.innerHTML = ''; // Vyčistíme předchozí cvičení
+    studentAnswers = Array(sentences.length).fill(null); // Inicializace sledování odpovědí
 
     sentences.forEach((sentence, index) => {
         const div = document.createElement('div');
-        div.innerHTML = `${sentence.replace("___", `<input type="text" id="input-${index}" maxlength="3">`)}`;
+        div.innerHTML = `${sentence.replace("___", `<input type="text" id="input-${index}" maxlength="3" oninput="updateStudentAnswer(${index}, this.value)">`)}`;
         container.appendChild(div);
     });
 
@@ -78,5 +89,27 @@ function loadDictation() {
         });
 
         alert(`Vaše skóre je: ${score}/${sentences.length}`);
+        if (adminWatching) {
+            alert('Admin vidí aktuální skóre studenta.');
+        }
+    });
+}
+
+function updateStudentAnswer(index, value) {
+    studentAnswers[index] = value;
+    if (adminWatching) {
+        updateAdminView();
+    }
+}
+
+function updateAdminView() {
+    const adminView = document.getElementById('admin-view');
+    if (!adminView) return;
+
+    adminView.innerHTML = '';
+    studentAnswers.forEach((answer, index) => {
+        const div = document.createElement('div');
+        div.textContent = `Věta ${index + 1}: ${answer || "nevyplněno"}`;
+        adminView.appendChild(div);
     });
 }
