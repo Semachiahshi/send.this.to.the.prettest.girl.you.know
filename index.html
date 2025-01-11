@@ -1,44 +1,14 @@
 <!DOCTYPE html>
-<html lang="cs">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Piškvorky</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Piškvorky</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div id="login">
-    <h1>Piškvorky - Přihlášení</h1>
-    <form id="loginForm">
-      <label for="user1">Uživatel 1:</label>
-      <input type="text" id="user1" placeholder="Jméno" required>
-      <input type="password" id="password1" placeholder="Heslo" required>
-      <label for="user2">Uživatel 2:</label>
-      <input type="text" id="user2" placeholder="Jméno" required>
-      <input type="password" id="password2" placeholder="Heslo" required>
-      <button type="submit">Přihlásit se</button>
-    </form>
-  </div>
-
-  <div id="game" class="hidden">
     <h1>Piškvorky</h1>
-    <h2 id="turn">Na tahu: </h2>
-    <div id="board"></div>
-    <div id="history">
-      <h3>Historie her:</h3>
-      <table>
-        <thead>
-          <tr>
-            <th>Hráč 1</th>
-            <th>Hráč 2</th>
-            <th>Vítěz</th>
-          </tr>
-        </thead>
-        <tbody id="historyBody"></tbody>
-      </table>
-    </div>
-  </div>
-
-  <script src="script.js"></script>
+    <div id="game-board"></div>
+    <script src="script.js"></script>
 </body>
 </html>
