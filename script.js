@@ -1,119 +1,103 @@
-let studentAnswers = []; // Sledování odpovědí studenta
-let correctAnswers = []; // Správné odpovědi
-let adminWatching = false; // Indikátor sledování adminem
+// Přihlášení
+const loginForm = document.getElementById('loginForm');
+const loginDiv = document.getElementById('login');
+const gameDiv = document.getElementById('game');
+const turnDisplay = document.getElementById('turn');
+const board = document.getElementById('board');
+const historyBody = document.getElementById('historyBody');
 
-document.getElementById('student-btn').addEventListener('click', function () {
-    document.getElementById('role-selection').style.display = 'none';
-    document.getElementById('student-screen').style.display = 'block';
-    loadDictation();
+let players = {};
+let currentPlayer = null;
+let boardState = Array(9).fill(null);
+let history = [];
+
+loginForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const user1 = document.getElementById('user1').value;
+  const password1 = document.getElementById('password1').value;
+  const user2 = document.getElementById('user2').value;
+  const password2 = document.getElementById('password2').value;
+
+  if (password1 === '1' && password2 === '2') {
+    players = { X: user1, O: user2 };
+    currentPlayer = 'X';
+    turnDisplay.textContent = `Na tahu: ${players[currentPlayer]}`;
+    loginDiv.classList.add('hidden');
+    gameDiv.classList.remove('hidden');
+    initBoard();
+  } else {
+    alert('Špatné heslo!');
+  }
 });
 
-document.getElementById('admin-btn').addEventListener('click', function () {
-    document.getElementById('role-selection').style.display = 'none';
-    document.getElementById('admin-screen').style.display = 'block';
-});
+// Inicializace hrací plochy
+function initBoard() {
+  board.innerHTML = '';
+  boardState.fill(null);
+  for (let i = 0; i < 9; i++) {
+    const cell = document.createElement('div');
+    cell.dataset.index = i;
+    cell.addEventListener('click', handleMove);
+    board.appendChild(cell);
+  }
+}
 
-document.getElementById('admin-login').addEventListener('click', function () {
-    const adminPassword = document.getElementById('admin-password').value;
-    if (adminPassword === 'admin123') {
-        alert('Vítejte, administrátore!');
-        document.getElementById('admin-screen').style.display = 'none';
-        document.getElementById('admin-management').style.display = 'block';
-        updateAdminView(); // Zobrazí aktuální stav odpovědí
+// Zpracování tahu
+function handleMove(e) {
+  const index = e.target.dataset.index;
+  if (!boardState[index]) {
+    boardState[index] = currentPlayer;
+    e.target.textContent = currentPlayer;
+    e.target.classList.add('taken');
+    if (checkWin()) {
+      endGame(players[currentPlayer]);
+    } else if (boardState.every(cell => cell)) {
+      endGame('Remíza');
     } else {
-        alert('Chybné heslo!');
+      currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+      turnDisplay.textContent = `Na tahu: ${players[currentPlayer]}`;
     }
-});
+  }
+}
 
-document.getElementById('freeze-dictation').addEventListener('click', function () {
-    alert('Diktát byl zmražen!');
-    document.getElementById('submit-dictation').disabled = true;
-    document.querySelectorAll('#dictation-container input').forEach(input => {
-        input.disabled = true;
-    });
-});
+// Kontrola výhry
+function checkWin() {
+  const winPatterns = [
+    [0, 1, 2], [3, 4, 5], [6, 7, 8], // Horizontální
+    [0, 3, 6], [1, 4, 7], [2, 5, 8], // Vertikální
+    [0, 4, 8], [2, 4, 6],           // Diagonální
+  ];
 
-document.getElementById('remove-student').addEventListener('click', function () {
-    alert('Student byl odstraněn!');
-    document.getElementById('student-screen').style.display = 'none';
-    document.getElementById('role-selection').style.display = 'block';
-});
+  return winPatterns.some(pattern => {
+    const [a, b, c] = pattern;
+    if (boardState[a] && boardState[a] === boardState[b] && boardState[a] === boardState[c]) {
+      document.querySelector(`[data-index="${a}"]`).classList.add('win');
+      document.querySelector(`[data-index="${b}"]`).classList.add('win');
+      document.querySelector(`[data-index="${c}"]`).classList.add('win');
+      return true;
+    }
+    return false;
+  });
+}
 
-document.getElementById('explain-dictation').addEventListener('click', function () {
-    const explanation = `
-        1. Měl jsi s **ním** to štěstí. (Používá se "n" s tvrdým i, protože jde o mužský rod.)
-        2. Včelky letěly kolem květ**in**. (Ženský rod končí měkkým "i".)
-        ... (a tak dále pro všech 10 vět)
+// Ukončení hry
+function endGame(winner) {
+  alert(winner === 'Remíza' ? 'Hra skončila remízou!' : `${winner} vyhrál!`);
+  history.push({ player1: players.X, player2: players.O, winner });
+  updateHistory();
+  initBoard();
+}
+
+// Aktualizace historie
+function updateHistory() {
+  historyBody.innerHTML = '';
+  history.forEach(game => {
+    const row = document.createElement('tr');
+    row.innerHTML = `
+      <td>${game.player1}</td>
+      <td>${game.player2}</td>
+      <td>${game.winner}</td>
     `;
-    alert(`Vysvětlení:\n${explanation}`);
-});
-
-document.getElementById('watch-student').addEventListener('click', function () {
-    adminWatching = true;
-    alert('Sledujete pokrok studenta.');
-    updateAdminView();
-});
-
-function loadDictation() {
-    const sentences = [
-        "Měl jsi s ___m to štěstí.",
-        "Včelky letěly kolem květ___.",
-        "Dítě si hrálo s hračk___.",
-        "Soused přišel s nov__m autem.",
-        "Na stole ležela kn__ha.",
-        "Děti běhaly po dvoř___.",
-        "Pes se schoval pod lav__ci.",
-        "Včera jsem viděl obrovsk__ho slona.",
-        "Maminka pekla koláč___.",
-        "V parku seděla stará pan__."
-    ];
-
-    correctAnswers = ["n", "in", "ami", "ým", "i", "e", "kou", "ého", "e", "í"];
-    studentAnswers = Array(sentences.length).fill(null); // Inicializace odpovědí
-    const container = document.getElementById('dictation-container');
-    container.innerHTML = ''; // Vyčistíme obsah
-
-    sentences.forEach((sentence, index) => {
-        const div = document.createElement('div');
-        div.innerHTML = `${sentence.replace("___", `<input type="text" id="input-${index}" maxlength="3" oninput="updateStudentAnswer(${index}, this.value)">`)}`;
-        container.appendChild(div);
-    });
-
-    document.getElementById('submit-dictation').addEventListener('click', function () {
-        let score = 0;
-        correctAnswers.forEach((correct, index) => {
-            const answer = studentAnswers[index] || "";
-            const input = document.getElementById(`input-${index}`);
-            if (answer.trim() === correct) {
-                score++;
-                input.style.backgroundColor = 'lightgreen';
-            } else {
-                input.style.backgroundColor = 'lightcoral';
-            }
-        });
-
-        alert(`Vaše skóre je: ${score}/${correctAnswers.length}`);
-        if (adminWatching) {
-            updateAdminView();
-        }
-    });
-}
-
-function updateStudentAnswer(index, value) {
-    studentAnswers[index] = value;
-    if (adminWatching) {
-        updateAdminView();
-    }
-}
-
-function updateAdminView() {
-    const adminView = document.getElementById('admin-view');
-    adminView.innerHTML = '';
-    studentAnswers.forEach((answer, index) => {
-        const div = document.createElement('div');
-        div.textContent = `Věta ${index + 1}: ${answer || "nevyplněno"} ${
-            answer === correctAnswers[index] ? "(správně)" : "(špatně)"
-        }`;
-        adminView.appendChild(div);
-    });
+    historyBody.appendChild(row);
+  });
 }
