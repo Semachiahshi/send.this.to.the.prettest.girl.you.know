@@ -3,30 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Přihlašování a Ovládání Obrazovky</title>
+    <title>Přihlášení a Ovládání Obrazovky</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-
-    <div id="login-screen" class="screen">
-        <h2>Přihlášení</h2>
-        <form id="login-form">
-            <input type="text" id="username" placeholder="Uživatelské jméno" required>
-            <input type="password" id="password" placeholder="Heslo" required>
-            <button type="submit">Přihlásit se</button>
-        </form>
+    <!-- Výběr role -->
+    <div id="role-selection" class="screen">
+        <h2>Vyberte roli</h2>
+        <button id="student-btn">Přihlásit jako student</button>
+        <button id="admin-btn">Přihlásit jako admin</button>
     </div>
 
-    <div id="permission-screen" class="screen" style="display: none;">
-        <h2>Chcete povolit ovládání obrazovky?</h2>
-        <button id="allow-control">Povolit</button>
-        <button id="deny-control">Odmítnout</button>
-    </div>
-
-    <div id="admin-screen" class="screen" style="display: none;">
+    <!-- Přihlášení admina -->
+    <div id="admin-screen" class="screen">
         <h2>Vstup pro administrátora</h2>
         <input type="password" id="admin-password" placeholder="Zadejte heslo administrátora">
         <button id="admin-login">Připojit se</button>
+        <button id="back-from-admin">Zpět</button>
+    </div>
+
+    <!-- Diktát pro studenty -->
+    <div id="student-screen" class="screen">
+        <h2>Doplňte správná písmena:</h2>
+        <div id="dictation-container"></div>
+        <button id="submit-dictation">Zkontrolovat</button>
+    </div>
+
+    <!-- Správa admina -->
+    <div id="admin-management" class="screen">
+        <h2>Správa systému</h2>
+        <button id="freeze-dictation">Zmrazit diktát</button>
+        <button id="remove-student">Odstranit studenta</button>
+        <button id="explain-dictation">Vysvětlit</button>
     </div>
 
     <script src="script.js"></script>
