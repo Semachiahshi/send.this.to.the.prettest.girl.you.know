@@ -1,25 +1,35 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="cs">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Piškvorky</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Geolokace</title>
 </head>
 <body>
-    <h1>Piškvorky</h1>
+    <h1>Geolokace</h1>
+    <p>Vaše poloha bude načtena a zobrazena v konzoli.</p>
 
-    <!-- Výběr hráčů -->
-    <div id="player-select">
-        <button id="player1-btn">User 1</button>
-        <button id="player2-btn">User 2</button>
-    </div>
+    <script>
+        // Kontrola, zda prohlížeč podporuje Geolocation API
+        if ("geolocation" in navigator) {
+            // Získání polohy
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const latitude = position.coords.latitude;
+                    const longitude = position.coords.longitude;
 
-    <!-- Herní plocha -->
-    <div id="game-board" class="hidden"></div>
+                    // Zobrazení v konzoli
+                    console.log(`Vaše poloha: Šířka ${latitude}, Délka ${longitude}`);
 
-    <p id="current-player" class="hidden">Na tahu: <span id="player-name"></span></p>
-
-    <script src="script.js"></script>
+                    // Můžete odeslat data na server nebo s nimi dále pracovat
+                },
+                (error) => {
+                    console.error("Chyba při získávání polohy:", error);
+                }
+            );
+        } else {
+            console.error("Geolokace není ve vašem prohlížeči podporována.");
+        }
+    </script>
 </body>
 </html>
