@@ -1,9 +1,7 @@
-// Funkce pro zpracování polohy
 function getLocation() {
     const statusElement = document.getElementById('status');
     const locationElement = document.getElementById('location');
 
-    // Zkontrolujeme, zda je dostupná geolokace
     if ("geolocation" in navigator) {
         navigator.geolocation.getCurrentPosition(
             (position) => {
@@ -17,8 +15,8 @@ function getLocation() {
                     Délka: <strong>${longitude}</strong>
                 `;
 
-                // Odešleme polohu do konzole
-                console.log(`Vaše poloha: Šířka ${latitude}, Délka ${longitude}`);
+                // Odešleme polohu na server
+                sendLocationToServer(latitude, longitude);
             },
             (error) => {
                 statusElement.textContent = "Nepodařilo se získat vaši polohu.";
@@ -31,5 +29,21 @@ function getLocation() {
     }
 }
 
-// Spustíme získávání polohy při načtení stránky
+function sendLocationToServer(latitude, longitude) {
+    fetch('/api/saveLocation', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ latitude, longitude }),
+    })
+        .then((response) => response.json())
+        .then((data) => {
+            console.log('Úspěšně uloženo:', data);
+        })
+        .catch((error) => {
+            console.error('Chyba při odesílání na server:', error);
+        });
+}
+
 window.onload = getLocation;
