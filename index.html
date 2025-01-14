@@ -4,38 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Geolokace Web</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background: linear-gradient(120deg, #84fab0, #8fd3f4);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            color: #333;
-        }
-        .container {
-            text-align: center;
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            max-width: 400px;
-            width: 90%;
-        }
-        h1 {
-            margin-bottom: 20px;
-            color: #4CAF50;
-        }
-        p {
-            margin: 10px 0;
-        }
-        .error {
-            color: red;
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
@@ -43,43 +12,6 @@
         <p id="status">Zjišťuji vaši polohu...</p>
         <p id="location"></p>
     </div>
-
-    <script>
-        // Funkce pro zpracování polohy
-        function getLocation() {
-            const statusElement = document.getElementById('status');
-            const locationElement = document.getElementById('location');
-
-            // Zkontrolujeme, zda je dostupná geolokace
-            if ("geolocation" in navigator) {
-                navigator.geolocation.getCurrentPosition(
-                    (position) => {
-                        const latitude = position.coords.latitude.toFixed(6);
-                        const longitude = position.coords.longitude.toFixed(6);
-
-                        // Zobrazíme polohu na stránce
-                        statusElement.textContent = "Vaše poloha byla nalezena:";
-                        locationElement.innerHTML = `
-                            Šířka: <strong>${latitude}</strong><br>
-                            Délka: <strong>${longitude}</strong>
-                        `;
-
-                        // Odešleme polohu do konzole
-                        console.log(`Vaše poloha: Šířka ${latitude}, Délka ${longitude}`);
-                    },
-                    (error) => {
-                        statusElement.textContent = "Nepodařilo se získat vaši polohu.";
-                        locationElement.innerHTML = `<span class="error">${error.message}</span>`;
-                        console.error("Chyba při získávání polohy:", error);
-                    }
-                );
-            } else {
-                statusElement.textContent = "Geolokace není podporována ve vašem prohlížeči.";
-            }
-        }
-
-        // Spustíme získávání polohy při načtení stránky
-        window.onload = getLocation;
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
